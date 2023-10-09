@@ -10,15 +10,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // make a database connection
-const db = mysql.createConnection(
-    {
-        host: 'localhost',
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        databse: process.env.DB_NAME
-    },
-    console.log('Connected to the employees database')
-);
 
-// return the current db info
-app.get('/api')
+// default for alternate requests
+app.use((req, res) => {
+    res.status(404).end();
+  });
+  
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
