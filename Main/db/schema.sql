@@ -25,5 +25,5 @@ CREATE TABLE employee (
     REFERENCES role(id),
     ON DELETE SET NULL,
     KEY (manager_id),
-    REFERENCES (id)
+    REFERENCES employee(id)
 );
