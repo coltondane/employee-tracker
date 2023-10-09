@@ -1,6 +1,7 @@
 // imports 
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
+const db = require('./db')
 
 
 // CLI prompt
@@ -16,18 +17,48 @@ inquirer
     ])
     
     .then((answer) => {
-        // consitionals fuction
+        // conditionals fuction
         const newAnswer = answer.options;
-        console.log(conditional(newAnswer));
-    })
+        conditional(newAnswer);
+    });
 
 function conditional(answer) {
-    return answer === 'view all departments' ? 'VAD'
-    : answer === 'view all roles' ? 'VAR'
-    : answer === 'view all employees' ? 'VAE'
-    : answer === 'add a department' ? 'AAD'
-    : answer === 'add a role' ? 'AAR'
-    : answer === 'add an employee' ? 'AAE'
-    : answer === 'update an employee role' ? 'UAER'
+    // ternary operators
+    return answer === 'view all departments' ? viewDepts()
+    : answer === 'view all roles' ? viewRoles()
+    : answer === 'view all employees' ? viewEmployees()
+    : answer === 'add a department' ? addDept()
+    : answer === 'add a role' ? addRole()
+    : answer === 'add an employee' ? addEmployee()
+    : answer === 'update an employee role' ? updateEmployeeRole()
     : 'exit';
+};
+
+function viewDepts() {
+    console.log('view depts function');
 }
+
+function viewRoles() {
+    console.log('view roles');
+}
+
+function viewEmployees() {
+    console.log('view employees');
+}
+
+function addDept() {
+    console.log('add dept');
+}
+
+function addRole() {
+    console.log('add role');
+}
+
+function addEmployee() {
+    console.log('add employee');
+}
+
+function updateEmployeeRole() {
+    console.log('update role');
+}
+
