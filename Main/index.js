@@ -5,7 +5,7 @@ const mysql = require('mysql2');
 
 // CLI prompt
 inquirer
-    prompt([
+    .prompt([
         {
             type: 'list',
             name: 'options',
@@ -14,3 +14,20 @@ inquirer
 
         }
     ])
+    
+    .then((answer) => {
+        // consitionals fuction
+        const newAnswer = answer.options;
+        console.log(conditional(newAnswer));
+    })
+
+function conditional(answer) {
+    return answer === 'view all departments' ? 'VAD'
+    : answer === 'view all roles' ? 'VAR'
+    : answer === 'view all employees' ? 'VAE'
+    : answer === 'add a department' ? 'AAD'
+    : answer === 'add a role' ? 'AAR'
+    : answer === 'add an employee' ? 'AAE'
+    : answer === 'update an employee role' ? 'UAER'
+    : 'exit';
+}
