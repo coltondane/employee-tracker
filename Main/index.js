@@ -11,7 +11,7 @@ inquirer
             type: 'list',
             name: 'options',
             message: 'Please select an option from the following: ',
-            choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
+            choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'exit']
 
         }
     ])
@@ -31,7 +31,7 @@ function conditional(answer) {
     : answer === 'add a role' ? addRole()
     : answer === 'add an employee' ? addEmployee()
     : answer === 'update an employee role' ? updateEmployeeRole()
-    : 'exit';
+    : exit();
 };
 
 function viewDepts() {
@@ -62,3 +62,7 @@ function updateEmployeeRole() {
     console.log('update role');
 }
 
+// exit the prompt
+function exit() {
+    process.exit();
+}
