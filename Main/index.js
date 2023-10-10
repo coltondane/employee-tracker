@@ -1,7 +1,8 @@
 // imports 
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const db = require('./db')
+const db = require('./config/connection')
+const query = require('./db/index');
 
 
 // CLI prompt
@@ -35,7 +36,11 @@ function conditional(answer) {
 };
 
 function viewDepts() {
-    console.log('view depts function');
+    // query sql
+    db.query('SELECT * FROM department', function (err, results) {
+        return (err) ? (err)
+        : console.table(results);
+    })
 }
 
 function viewRoles() {
