@@ -1,8 +1,8 @@
 // imports 
 const inquirer = require('inquirer');
-const mysql = require('mysql2');
+// const mysql = require('mysql2');
 const db = require('./config/connection')
-const query = require('./db/index');
+// const query = require('./db/index');
 
 
 // CLI prompt
@@ -24,22 +24,39 @@ inquirer
     });
 
 function conditional(answer) {
+    
+    switch (answer) {
+        case 'view all departments':
+            viewDepts();
+            break;
+    
+        case 'view all roles':
+            viewRoles();
+            break;
+        
+        case 'view all employees':
+            viewEmployees();
+            break;
+        
+        default:
+            break;
+    }
     // ternary operators
-    return answer === 'view all departments' ? viewDepts()
-    : answer === 'view all roles' ? viewRoles()
-    : answer === 'view all employees' ? viewEmployees()
-    : answer === 'add a department' ? addDept()
-    : answer === 'add a role' ? addRole()
-    : answer === 'add an employee' ? addEmployee()
-    : answer === 'update an employee role' ? updateEmployeeRole()
-    : exit();
+    // return answer === 'view all departments' ? viewDepts()
+    // : answer === 'view all roles' ? viewRoles()
+    // : answer === 'view all employees' ? viewEmployees()
+    // : answer === 'add a department' ? addDept()
+    // : answer === 'add a role' ? addRole()
+    // : answer === 'add an employee' ? addEmployee()
+    // : answer === 'update an employee role' ? updateEmployeeRole()
+    // : exit();
 };
 
 function viewDepts() {
     // query sql
     db.query('SELECT * FROM department', function (err, results) {
-        return (err) ? (err)
-        : console.table(results);
+        if (err) throw err;
+        console.table(results);
     })
 }
 
