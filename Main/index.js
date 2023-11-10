@@ -79,6 +79,7 @@ function conditional(answer) {
 }
 
 function viewDepts() {
+  console.log("Depts test");
   // query sql
   db.query("SELECT * FROM department", function (err, results) {
     if (err) throw err;
