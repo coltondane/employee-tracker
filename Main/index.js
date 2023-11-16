@@ -32,7 +32,7 @@ function inquire() {
       ],
     },
   ]).then((answer) => {
-    // conditionals fuction
+    // conditionals function
     const newAnswer = answer.options;
     conditional(newAnswer);
   });
@@ -204,7 +204,7 @@ async function addEmployee() {
     db.query("INSERT INTO employee SET ?", answer, function (err, results) {
       if (err) throw err;
       console.log(results);
-      // if the user adds a department
+      // if the user adds an employee
       if (results.affectedRows > 0) {
         viewEmployees();
         console.log("added employee");
@@ -215,26 +215,51 @@ async function addEmployee() {
       }
     });
   });
-
 }
 
 async function updateEmployeeRole() {
   log("Updating Employee Role");
+  // get the employee list
   const [employee] = await db.promise().query('SELECT first_name, last_name, id FROM employee');
-  console.log(employee);
-  const employeeArray = manager.map((manager) => ({
+  const employeeArray = employee.map((employee) => ({
     name : `${employee.first_name} ${employee.last_name}`,
     value: employee.id
-  }))
+  }));
+  const [role] = await db.promise().query('SELECT title, id FROM role');
+  const rolesArray = role.map((role) => ({
+    name: `${role.title}`,
+    value: role.title
+  }));
   prompt([
     {
       type: 'list',
       name: 'id',
       choices: employeeArray,
       message: 'please select an employee to update'
+    },
+    {
+      type: 'list',
+      name: 'role_title',
+      choices: rolesArray,
+      message: 'please select a role for the employee'
     }
-  ])
-  console.log("update role");
+  ]).then((answer) => {
+    console.log(answer);
+    // sql query into db
+    db.query(`UPDATE employee SET title = ? WHERE id = ${answer.id} `, answer.role_title, function (err, results) {
+      if (err) throw err;
+      console.log(results);
+      // if the user adds a department
+      if (results.affectedRows > 0) {
+        viewEmployees();
+        console.log("Updated Employee Role");
+      } else {
+        console.error("failed to update employee role");
+        // if it fails to add to database call the inquirer
+        inquire();
+      }
+    });
+  });
 }
 
 // exit the prompt
