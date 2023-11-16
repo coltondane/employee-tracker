@@ -48,34 +48,6 @@ function conditional(answer) {
   : answer === 'add an employee' ? addEmployee()
   : answer === 'update an employee role' ? updateEmployeeRole()
   : exit();
-  // switch (answer) {
-  //   case "view all departments":
-  //     viewDepts();
-  //     break;
-
-  //   case "view all roles":
-  //     viewRoles();
-  //     break;
-
-  //   case "view all employees":
-  //     viewEmployees();
-  //     break;
-
-  //   case "add a department":
-  //     addDept();
-  //     break;
-
-  //   case "add a role":
-  //     addRole();
-  //     break;
-
-  //   case "add an employee":
-  //     addEmployee();
-  //     break;
-
-  //   default:
-  //     break;
-  // }
 }
 
 function viewDepts() {
@@ -100,7 +72,10 @@ function viewRoles() {
 }
 
 function viewEmployees() {
-  db.query("SELECT * FROM employee", function (err, results) {
+  //  employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers
+  // manager first name last name
+  db.query(
+    "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id JOIN employee manager ON manager.id = employee.manager_id", function (err, results) {
     if (err) throw err;
     console.table(results);
     inquire();
@@ -181,18 +156,18 @@ async function addRole() {
 
 async function addEmployee() {
   // create an array for the roles to choose from
-  const [role] = await db.promise().query('SELECT * FROM role');
+  const [role] = await db.promise().query('SELECT title, id FROM role');
   const rolesArray = role.map((role) => ({
-    id: role.id,
-    title: role.title,
-    salary: role.salary,
-    dept_id: role.department_id,
-    department: role.name
+    name: role.title,
+    value: role.id
   }));
 
-  // create an array for the manager s to choose from
-  const [manager] = await db.promise().query('SELECT CONCAT(first_name, " ",last_name) FROM employee WHERE employee.manager_id = 1');
-  console.log(manager);
+  // create an array for the managers to choose from
+  const [manager] = await db.promise().query('SELECT first_name, last_name, id FROM employee');
+  const managerArray = manager.map((manager) => ({
+    name : `${manager.first_name} ${manager.last_name}`,
+    value: manager.id
+  }))
 
   prompt([
     {
@@ -207,17 +182,52 @@ async function addEmployee() {
     },
     {
       type: 'list',
-      name: 'role',
+      name: 'role_id',
       choices: rolesArray,
       message: 'please select a role'
+    },
+    {
+      type: 'list',
+      name: 'manager_id',
+      choices: managerArray,
+      message: 'please select a manager'
     }
 
-  ])
+  ]).then((answer) => {
+    console.log(answer);
+    // sql query into db
+    db.query("INSERT INTO employee SET ?", answer, function (err, results) {
+      if (err) throw err;
+      console.log(results);
+      // if the user adds a department
+      if (results.affectedRows > 0) {
+        viewEmployees();
+        console.log("added employee");
+      } else {
+        console.error("failed to add employee");
+        // if it fails to add to database call the inquirer
+        inquire();
+      }
+    });
+  });
 
-  console.log("add employee");
 }
 
-function updateEmployeeRole() {
+async function updateEmployeeRole() {
+  const [employee] = await db.promise().query('SELECT first_name, last_name, id FROM employee');
+  console.log(employee);
+  const employeeArray = manager.map((manager) => ({
+    name : `${employee.first_name} ${employee.last_name}`,
+    value: employee.id
+  }))
+  prompt([
+    {
+      type: 'list',
+      name: 'id',
+      choices: employeeArray,
+      message: 'please select an employee to update'
+    }
+  ])
   console.log("update role");
 }
 
