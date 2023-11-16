@@ -4,14 +4,6 @@ const { prompt } = require("inquirer");
 const db = require("./config/connection");
 const { log } = require("console");
 // const query = require('./db/index');
-async function buildDeptList() {
-  const [departments] = await db.promise().query("SELECT * FROM department");
-  const deptArray = departments.map((department) => ({
-    name: department.name,
-    value: department.id,
-  }));
-  return deptArray;
-}
 
 // CLI prompt
 function inquire() {
