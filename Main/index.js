@@ -219,8 +219,8 @@ async function addEmployee() {
 
 async function updateEmployeeRole() {
   log("Updating Employee Role");
-  // get the employee list
-  const [employee] = await db.promise().query('SELECT first_name, last_name, id FROM employee');
+  // get the employee list without managers
+  const [employee] = await db.promise().query('SELECT first_name, last_name, id FROM employee WHERE manager_id IS NOT NULL');
   const employeeArray = employee.map((employee) => ({
     name : `${employee.first_name} ${employee.last_name}`,
     value: employee.id
@@ -228,7 +228,7 @@ async function updateEmployeeRole() {
   const [role] = await db.promise().query('SELECT title, id FROM role');
   const rolesArray = role.map((role) => ({
     name: `${role.title}`,
-    value: role.title
+    value: role.id
   }));
   prompt([
     {
@@ -239,20 +239,20 @@ async function updateEmployeeRole() {
     },
     {
       type: 'list',
-      name: 'role_title',
+      name: 'role_id',
       choices: rolesArray,
       message: 'please select a role for the employee'
     }
   ]).then((answer) => {
     console.log(answer);
     // sql query into db
-    db.query(`UPDATE employee SET title = ? WHERE id = ${answer.id} `, answer.role_title, function (err, results) {
+    db.query("UPDATE employee SET role_id = ? WHERE id = ?", [answer.role_id, answer.id], function (err, results) {
       if (err) throw err;
       console.log(results);
-      // if the user adds a department
+      // if the user updates a role 
       if (results.affectedRows > 0) {
-        viewEmployees();
         console.log("Updated Employee Role");
+        viewEmployees();
       } else {
         console.error("failed to update employee role");
         // if it fails to add to database call the inquirer
