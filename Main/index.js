@@ -51,7 +51,7 @@ function conditional(answer) {
 }
 
 function viewDepts() {
-  console.log("Depts test");
+  log("Viewing Departments");
   // query sql
   db.query("SELECT * FROM department", function (err, results) {
     if (err) throw err;
@@ -61,6 +61,7 @@ function viewDepts() {
 }
 
 function viewRoles() {
+  log("Viewing Roles");
   db.query(
     "SELECT * FROM role LEFT JOIN department ON role.department_id = department.id",
     function (err, results) {
@@ -74,6 +75,7 @@ function viewRoles() {
 function viewEmployees() {
   //  employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers
   // manager first name last name
+  log("Viewing Employees");
   db.query(
     "SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name, CONCAT(manager.first_name, ' ', manager.last_name) AS manager FROM employee JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id JOIN employee manager ON manager.id = employee.manager_id", function (err, results) {
     if (err) throw err;
@@ -83,6 +85,7 @@ function viewEmployees() {
 }
 
 function addDept() {
+  log("Adding Department");
   prompt({
     type: "input",
     name: "name",
@@ -111,6 +114,7 @@ function addDept() {
 }
 
 async function addRole() {
+  log("Adding Role");
   // create an array of departments
   const [departments] = await db.promise().query("SELECT * FROM department");
   // map the departments array and set the name and id values
@@ -155,6 +159,7 @@ async function addRole() {
 }
 
 async function addEmployee() {
+  log("Adding Employee");
   // create an array for the roles to choose from
   const [role] = await db.promise().query('SELECT title, id FROM role');
   const rolesArray = role.map((role) => ({
@@ -214,6 +219,7 @@ async function addEmployee() {
 }
 
 async function updateEmployeeRole() {
+  log("Updating Employee Role");
   const [employee] = await db.promise().query('SELECT first_name, last_name, id FROM employee');
   console.log(employee);
   const employeeArray = manager.map((manager) => ({

@@ -1,6 +1,6 @@
 # employee-tracker [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Description
-    This MySQL application is operated through the command-line as the user answers the prompts provided by inquirer. In doing so the user will have the opportunity to navigate a mocked employee database allowing them to view the departments, roles, and employees. The user will also be allowed to add departments, roles, and employees if they choose to do so.  
+    This MySQL application is operated through the command-line as the user answers the prompts provided by inquirer. In doing so the user will have the opportunity to navigate a mocked employee database allowing them to view the departments, roles, and employees. The user will also be allowed to add departments, roles, employees, and even update an employees individual role if they choose to do so.  
 ## Table Of Contents
 - [Installation](#installation)
 - [Usage](#usage)
