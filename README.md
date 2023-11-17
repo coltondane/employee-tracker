@@ -23,3 +23,8 @@
 - [My GitHub](https://github.com/coltondane)
     coltondane.py@gmail.com
 ## Screenshot(s)
+
+
+https://github.com/coltondane/employee-tracker/assets/113216904/8d3c2025-c649-4525-a540-3fbc32f1e766
+
+
